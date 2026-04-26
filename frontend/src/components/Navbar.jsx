@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { HiSparkles } from 'react-icons/hi2';
+import { HiSparkles, HiArrowRightOnRectangle, HiUserCircle } from 'react-icons/hi2';
 import { RiMenuLine, RiCloseLine } from 'react-icons/ri';
 import './Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({ user, onLoginClick, onLogout }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -31,10 +31,22 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-actions">
-          <button className="nav-cta">
-            <HiSparkles className="cta-icon" />
-            Get Started
-          </button>
+          {user ? (
+            <div className="nav-user-area">
+              <div className="nav-user-badge">
+                <HiUserCircle className="user-avatar-icon" />
+                <span className="nav-user-name">{user.name}</span>
+              </div>
+              <button className="nav-logout-btn" onClick={onLogout} title="Sign Out">
+                <HiArrowRightOnRectangle />
+              </button>
+            </div>
+          ) : (
+            <button className="nav-cta" onClick={onLoginClick}>
+              <HiSparkles className="cta-icon" />
+              Get Started
+            </button>
+          )}
           <button
             className="mobile-toggle"
             onClick={() => setMobileOpen(!mobileOpen)}

@@ -21,7 +21,7 @@ const styleOptions = [
   { id: 'glassmorphism', label: 'Glass', icon: <RiMagicLine /> },
 ];
 
-const PromptInput = ({ onGenerate, isGenerating, error, onClearError }) => {
+const PromptInput = ({ onGenerate, isGenerating, error, onClearError, isLoggedIn, onLoginClick }) => {
   const [prompt, setPrompt] = useState('');
   const [selectedStyle, setSelectedStyle] = useState('modern');
   const [charCount, setCharCount] = useState(0);
@@ -176,11 +176,21 @@ const PromptInput = ({ onGenerate, isGenerating, error, onClearError }) => {
             )}
           </AnimatePresence>
 
+          {/* Sign-in nudge */}
+          {!isLoggedIn && (
+            <div className="auth-nudge">
+              <span>🔒 Please sign in to generate designs</span>
+              <button type="button" className="auth-nudge-btn" onClick={onLoginClick}>
+                Sign In / Sign Up
+              </button>
+            </div>
+          )}
+
           {/* Generate button */}
           <button
             className={`generate-btn ${isGenerating ? 'generating' : ''}`}
             onClick={handleSubmit}
-            disabled={!prompt.trim() || isGenerating}
+            disabled={!prompt.trim() || isGenerating || !isLoggedIn}
             id="generate-design-btn"
           >
             <AnimatePresence mode="wait">

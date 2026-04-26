@@ -6,6 +6,7 @@ import DesignGallery from './components/DesignGallery';
 import Features from './components/Features';
 import HowItWorks from './components/HowItWorks';
 import Footer from './components/Footer';
+import AuthModal from './components/AuthModal';
 import './App.css';
 
 function App() {
@@ -13,7 +14,21 @@ function App() {
   const [generatedDesigns, setGeneratedDesigns] = useState([]);
   const [error, setError] = useState(null);
   const [isLoadingDesigns, setIsLoadingDesigns] = useState(true);
+  const [user, setUser] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const promptRef = useRef(null);
+
+  // Restore session on mount
+  useEffect(() => {
+    const session = localStorage.getItem('aimodel_session');
+    if (session) {
+      try {
+        setUser(JSON.parse(session));
+      } catch {
+        localStorage.removeItem('aimodel_session');
+      }
+    }
+  }, []);
 
   // Load saved designs from MongoDB and localStorage on page load
   useEffect(() => {
@@ -78,6 +93,12 @@ function App() {
   }, []);
 
   const handleGenerate = useCallback(async (prompt, style) => {
+    // Gate behind auth — if not logged in, show auth modal
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+
     setIsGenerating(true);
     setError(null);
 
@@ -137,17 +158,36 @@ function App() {
     } finally {
       setIsGenerating(false);
     }
-  }, []);
+  }, [user]);
+
+  const handleAuth = (session) => {
+    setUser(session);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('aimodel_session');
+  };
+
+  const handleLoginClick = () => {
+    setShowAuthModal(true);
+  };
 
   return (
     <div className="app">
-      <Navbar />
+      <Navbar
+        user={user}
+        onLoginClick={handleLoginClick}
+        onLogout={handleLogout}
+      />
       <main>
         <PromptInput
           onGenerate={handleGenerate}
           isGenerating={isGenerating}
           error={error}
           onClearError={() => setError(null)}
+          isLoggedIn={!!user}
+          onLoginClick={handleLoginClick}
         />
         <Hero onScrollToPrompt={handleScrollToPrompt} />
         <DesignGallery
@@ -158,6 +198,12 @@ function App() {
         <HowItWorks />
       </main>
       <Footer />
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onAuth={handleAuth}
+      />
     </div>
   );
 }

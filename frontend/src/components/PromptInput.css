@@ -324,6 +324,45 @@
   flex-shrink: 0;
 }
 
+/* Auth Nudge Banner */
+.auth-nudge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  border-radius: var(--radius-md);
+  background: rgba(124, 92, 252, 0.06);
+  border: 1px solid rgba(124, 92, 252, 0.15);
+}
+
+.auth-nudge span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.auth-nudge-btn {
+  padding: 8px 18px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  color: white;
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  box-shadow: var(--shadow-glow);
+}
+
+.auth-nudge-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow-strong);
+}
+
 @media (max-width: 640px) {
   .prompt-card {
     padding: 20px;
@@ -335,5 +374,11 @@
 
   .shortcut-hint {
     display: none;
+  }
+
+  .auth-nudge {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
   }
 }
