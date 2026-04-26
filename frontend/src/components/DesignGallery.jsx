@@ -100,6 +100,17 @@ const DesignGallery = ({ generatedDesigns = [] }) => {
   const [likedDesigns, setLikedDesigns] = useState(new Set());
   const [expandedCode, setExpandedCode] = useState(null); // track which card's code is open
   const [lightboxTab, setLightboxTab] = useState('preview'); // 'preview' | 'code'
+  const previewRef = useRef(null);
+
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      previewRef.current?.requestFullscreen?.().catch(err => {
+        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen?.();
+    }
+  };
 
   const allDesigns = [...generatedDesigns, ...mockDesigns];
 
@@ -331,6 +342,7 @@ const DesignGallery = ({ generatedDesigns = [] }) => {
                 <>
                   <div
                     className="lightbox-preview"
+                    ref={previewRef}
                     style={{ background: lightboxDesign.aiGeneratedCode?.fullHtml ? '#0a0a0a' : lightboxDesign.gradient }}
                   >
                     {lightboxDesign.aiGeneratedCode?.fullHtml ? (
@@ -342,6 +354,9 @@ const DesignGallery = ({ generatedDesigns = [] }) => {
                     ) : (
                       <div className="lightbox-ui-label">AI Generated Design Preview</div>
                     )}
+                    <button className="fullscreen-btn" onClick={toggleFullScreen} title="Toggle Fullscreen">
+                      <HiArrowsPointingOut />
+                    </button>
                   </div>
 
                 </>
