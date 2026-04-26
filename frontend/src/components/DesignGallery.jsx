@@ -364,9 +364,6 @@ const DesignGallery = ({ generatedDesigns = [] }) => {
                 <div className="lightbox-code-area">
                   <div className="lightbox-code-header">
                     <h3>Generated Code</h3>
-                    <p className="lightbox-code-prompt">
-                      Prompt: "{lightboxDesign.prompt}"
-                    </p>
                   </div>
                   <CodeViewer
                     htmlCode={getDesignCode(lightboxDesign).htmlCode}
