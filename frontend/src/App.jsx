@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import './App.css';
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
 function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedDesigns, setGeneratedDesigns] = useState([]);
@@ -44,8 +45,7 @@ function App() {
           }
         }
 
-        const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
-        const response = await fetch(`${BACKEND_URL}/api/designs/`);
+        // BACKEND_URL defined at component level        const response = await fetch(`${BACKEND_URL}/api/designs/`);
         const data = await response.json();
 
         if (data.success && data.designs && data.designs.length > 0) {
