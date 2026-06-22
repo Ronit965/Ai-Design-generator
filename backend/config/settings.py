@@ -18,7 +18,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-fallback-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'ai-design-generator-one.vercel.app']
 
 # Application definition
 INSTALLED_APPS = [
