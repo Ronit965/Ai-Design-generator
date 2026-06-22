@@ -9,7 +9,7 @@ import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
 import './App.css';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://ai-design-generator-one.vercel.app';
 function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedDesigns, setGeneratedDesigns] = useState([]);
@@ -94,6 +94,12 @@ function App() {
   }, []);
 
   const handleGenerate = useCallback(async (prompt, style) => {
+    const trimmedPrompt = prompt.trim();
+    if (!trimmedPrompt) {
+      setError('Please enter a prompt.');
+      return;
+    }
+
     // Gate behind auth — if not logged in, show auth modal
     if (!user) {
       setShowAuthModal(true);
@@ -109,12 +115,12 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt, style }),
+        body: JSON.stringify({ prompt: trimmedPrompt, style }),
       });
 
       const data = await response.json();
 
-      if (!data.success) {
+      if (!response.ok || !data.success) {
         throw new Error(data.error || 'Failed to generate design');
       }
 
