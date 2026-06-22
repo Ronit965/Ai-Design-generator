@@ -44,7 +44,8 @@ function App() {
           }
         }
 
-        const response = await fetch('https://ai-design-generator-one.vercel.app/api/designs/');
+        const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || '';
+        const response = await fetch(`${BACKEND_URL}/api/designs/`);
         const data = await response.json();
 
         if (data.success && data.designs && data.designs.length > 0) {
@@ -103,7 +104,7 @@ function App() {
     setError(null);
 
     try {
-      const response = await fetch('https://ai-design-generator-one.vercel.app/api/generate/', {
+      const response = await fetch(`${BACKEND_URL}/api/generate/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
